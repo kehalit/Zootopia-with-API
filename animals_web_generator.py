@@ -1,10 +1,16 @@
 import json
-import webbrowser
+import requests
 
-def load_data(file_path):
-    """ Loads a JSON file """
-    with open('animals_data.json', 'r') as file:
-        return json.load(file)
+API_KEY = "CdYYw0zODjWdMdm9rdeXeg==GjH45xRiPvGqfrSp"
+animal_name =input("Enter a name of an animal: ")
+def fetch_animals():
+    url = f'https://api.api-ninjas.com/v1/animals?X-Api-Key={API_KEY}&name={animal_name}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print("Error fetching data from API")
 
 
 def serialize_animal(animal_obj):
@@ -36,7 +42,9 @@ def generate_html(animals_data, html_template):
 
 def main():
     """Main function to load data, generate HTML and write it to a file."""
-    animals_data = load_data('animals_data.json')
+
+
+    animals_data = fetch_animals()
     with open("animals_template.html", "r") as file:
         html_template = file.read()
 
@@ -47,7 +55,7 @@ def main():
     with open("animals.html", "w") as file:
         file.write(html_output)
 
-    print("HTML file 'animals.html' generated successfully!")
+    print("Website was successfully generated to the file animals.html.")
 
 
 if __name__ == "__main__":
