@@ -1,18 +1,5 @@
 import json
-import requests
-
-from class_zwith_Api.test import animal_name
-
-API_KEY = "CdYYw0zODjWdMdm9rdeXeg==GjH45xRiPvGqfrSp"
-name = animal_name
-def fetch_animals():
-    url = f'https://api.api-ninjas.com/v1/animals?X-Api-Key={API_KEY}&name={name}'
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print("Error fetching data from API")
+import data_fetcher
 
 
 def serialize_animal(animal_obj):
@@ -32,32 +19,25 @@ def serialize_animal(animal_obj):
     return output
 
 
-def generate_html(animals_data, html_template, animal_name=None):
+def generate_html(animals_data, html_template):
     """Generates HTML content by serializing animal data and replacing placeholders in the template."""
-    output= ''
-    if animal_name:
-        animals_data = [animal for animal in animals_data if animal["name"].lower() == animal_name.lower()]
+    if not animals_data:
+        error_message = '<h2 class="error-message">No animals found for your search.</h2>'
+        return html_template.replace("__REPLACE_ANIMALS_INFO__", error_message)
 
-        # Check if animals exist
-    if animals_data:
-         for animal in animals_data:
-            output += serialize_animal(animal)
-    else:
-        # Display error message
-        output = f'<h2 class="error-message">The animal "{animal_name}" doesn’t exist.</h2>'
-
-    return html_template.replace("__REPLACE_ANIMALS_INFO__", output)
+    animal_html = "".join(serialize_animal(animal) for animal in animals_data)
+    return html_template.replace("__REPLACE_ANIMALS_INFO__", animal_html)
 
 def main():
     """Main function to load data, generate HTML and write it to a file."""
 
-
-    animals_data = fetch_animals()
+    animal_name = input("Enter a name of an animal: ")
+    animals_data = data_fetcher.fetch_animals(animal_name)
     with open("animals_template.html", "r") as file:
         html_template = file.read()
-    animal_name = input("Enter a name of an animal: ")
+
     # Generate HTML output
-    html_output = generate_html(animals_data, html_template, animal_name)
+    html_output = generate_html(animals_data, html_template)
 
     # Write the generated HTML to a new file
     with open("animals.html", "w") as file:
