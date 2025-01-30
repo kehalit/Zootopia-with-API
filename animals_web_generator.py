@@ -28,6 +28,7 @@ def generate_html(animals_data, html_template):
     animal_html = "".join(serialize_animal(animal) for animal in animals_data)
     return html_template.replace("__REPLACE_ANIMALS_INFO__", animal_html)
 
+
 def main():
     """Main function to load data, generate HTML and write it to a file."""
 
