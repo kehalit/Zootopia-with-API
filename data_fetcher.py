@@ -1,9 +1,12 @@
 import requests
-import json
+import os
+from dotenv import load_dotenv
 
 
-API_KEY = "CdYYw0zODjWdMdm9rdeXeg==GjH45xRiPvGqfrSp"
+from class_zwith_Api.test import API_KEY
+load_dotenv()
 
+API_KEY = os.getenv('API_KEY')
 def fetch_animals(animal_name):
     url = f'https://api.api-ninjas.com/v1/animals?X-Api-Key={API_KEY}&name={animal_name}'
     response = requests.get(url)
