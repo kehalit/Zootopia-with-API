@@ -19,10 +19,10 @@ def serialize_animal(animal_obj):
     return output
 
 
-def generate_html(animals_data, html_template):
+def generate_html(animals_data, html_template, animal_name):
     """Generates HTML content by serializing animal data and replacing placeholders in the template."""
     if not animals_data:
-        error_message = '<h2 class="error-message">No animals found for your search.</h2>'
+        error_message = f'<h2>The animal "{animal_name}" doesn\'t exist.</h2>'
         return html_template.replace("__REPLACE_ANIMALS_INFO__", error_message)
 
     animal_html = "".join(serialize_animal(animal) for animal in animals_data)
@@ -38,7 +38,7 @@ def main():
         html_template = file.read()
 
     # Generate HTML output
-    html_output = generate_html(animals_data, html_template)
+    html_output = generate_html(animals_data, html_template, animal_name)
 
     # Write the generated HTML to a new file
     with open("animals.html", "w") as file:

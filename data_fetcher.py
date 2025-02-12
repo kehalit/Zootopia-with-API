@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 
-from class_zwith_Api.test import API_KEY
+#from class_zwith_Api.test import API_KEY
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
